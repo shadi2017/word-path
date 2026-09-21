@@ -1,0 +1,30 @@
+// Optional local integration suite: requires test-tools/pglite/package (not shipped).
+import {PGlite} from '../test-tools/pglite/package/dist/index.js';
+import fs from 'node:fs';import assert from 'node:assert/strict';
+const db=new PGlite();
+await db.exec(`create role anon;create role authenticated;create role service_role;
+create schema auth;create table auth.users(id uuid primary key,email text,email_confirmed_at timestamptz,raw_user_meta_data jsonb);
+create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$;grant usage on schema auth to authenticated;grant execute on function auth.uid() to authenticated;`);
+await db.exec(fs.readFileSync(new URL('../supabase/schema.sql',import.meta.url),'utf8'));
+const ids=['00000000-0000-0000-0000-000000000001','00000000-0000-0000-0000-000000000002','00000000-0000-0000-0000-000000000003'];
+for(let i=0;i<3;i++)await db.query('insert into auth.users values($1,$2,now(),$3)',[ids[i],`test${i}@example.com`,JSON.stringify({username:'tester'+i,display_name:'Test '+i})]);
+await db.query("update private.profiles set role='admin',status='approved' where id=$1",[ids[0]]);
+async function as(id,sql,params=[]){await db.exec('reset role');await db.query("select set_config('request.jwt.claim.sub',$1,false)",[id]);await db.exec('set role authenticated');return db.query(sql,params)}
+let checks=0;
+const check=async(name,fn)=>{await fn();checks++;console.log('PASS',name)};
+await check('pending sees own status only',async()=>{const r=await as(ids[1],'select public.dashboard() as d');assert.equal(r.rows[0].d.me.status,'pending');assert.equal(r.rows[0].d.plan,undefined)});
+await check('pending cannot save plan or search',async()=>{await assert.rejects(()=>as(ids[1],"select public.save_plan('2026-01-01','2026-12-31','varied')"));await assert.rejects(()=>as(ids[1],"select public.search_members('test')"))});
+await check('pending cannot self-approve',async()=>{await assert.rejects(()=>as(ids[1],"select public.manage_member($1,'approve')",[ids[1]]))});
+await check('direct tables and email recipients denied',async()=>{await assert.rejects(()=>as(ids[1],'select * from private.profiles'));await assert.rejects(()=>as(ids[0],"select public.email_recipients('2026-01-02')"))});
+await check('admin approves user',async()=>{await as(ids[0],"select public.manage_member($1,'approve')",[ids[1]]);const r=await as(ids[1],'select public.dashboard() as d');assert.equal(r.rows[0].d.me.status,'approved')});
+await check('plan and idempotent progress persist',async()=>{await as(ids[1],"select public.save_plan('2026-01-01','2026-12-31','varied')");await as(ids[1],"select public.set_progress(array['1:1','1:2'],true)");await as(ids[1],"select public.set_progress(array['1:1'],true)");let r=await as(ids[1],'select public.dashboard() as d');assert.deepEqual(r.rows[0].d.done,['1:1','1:2']);await as(ids[1],"select public.save_plan('2026-02-01','2026-08-01','ordered')");r=await as(ids[1],'select public.dashboard() as d');assert.equal(r.rows[0].d.done.length,2);await as(ids[1],"select public.set_progress(array['1:2'],false)");r=await as(ids[1],'select public.dashboard() as d');assert.deepEqual(r.rows[0].d.done,['1:1'])});
+await check('invalid chapter and plan rejected',async()=>{for(const ch of ['0:1','67:1','66:23','1:0','1:01','1:1000000000'])await assert.rejects(()=>as(ids[1],'select public.set_progress(array[$1],true)',[ch]));await assert.rejects(()=>as(ids[1],"select public.save_plan('2027-01-01','2026-01-01','varied')"))});
+await check('ordinary user cannot administer',async()=>{await assert.rejects(()=>as(ids[1],"select public.create_organization('group','test')"));await assert.rejects(()=>as(ids[1],'select public.admin_overview()'))});
+let org;
+await check('admin creates group and membership',async()=>{org=(await as(ids[0],"select public.create_organization('مجموعة','اختبار') as id")).rows[0].id;await as(ids[0],'select public.set_membership($1,$2,true)',[org,ids[1]]);const r=await as(ids[1],'select public.organization_members($1) as m',[org]);assert.equal(r.rows[0].m.length,1)});
+await check('non-member cannot read group',async()=>{await as(ids[0],"select public.manage_member($1,'approve')",[ids[2]]);await assert.rejects(()=>as(ids[2],'select public.organization_members($1)',[org]))});
+await check('username search and profile do not expose email',async()=>{const r=await as(ids[2],"select public.search_members('tester1') as m");assert.equal(r.rows[0].m.length,1);assert.equal(r.rows[0].m[0].email,undefined);const p=await as(ids[2],"select public.member_profile('tester1') as p");assert.equal(p.rows[0].p.done.length,1);assert.equal(p.rows[0].p.member.email,undefined)});
+await check('encouragement and length validation',async()=>{await as(ids[2],'select public.send_encouragement($1,$2)',[ids[1],'كمّل، كل خطوة بتفرق']);const r=await as(ids[1],'select public.dashboard() as d');assert.equal(r.rows[0].d.comments[0].body,'كمّل، كل خطوة بتفرق');await assert.rejects(()=>as(ids[2],'select public.send_encouragement($1,$2)',[ids[1],' ']))});
+await check('preferences and service-only delivery log',async()=>{await as(ids[1],'select public.save_preferences(true,true)');await db.exec('reset role; set role service_role');let r=await db.query("select public.email_recipients('2026-01-02') as m");assert.equal(r.rows[0].m.length,1);await db.query("select public.record_email($1,'2026-01-02','test-id')",[ids[1]]);r=await db.query("select public.email_recipients('2026-01-02') as m");assert.equal(r.rows[0].m.length,0)});
+await check('revocation immediately blocks member actions',async()=>{await as(ids[0],"select public.manage_member($1,'reject')",[ids[1]]);await assert.rejects(()=>as(ids[1],"select public.set_progress(array['1:2'],true)"));await assert.rejects(()=>as(ids[1],"select public.search_members('test')"));const r=await as(ids[1],'select public.dashboard() as d');assert.equal(r.rows[0].d.me.status,'rejected')});
+await db.close();console.log(`${checks} database integration checks passed.`);

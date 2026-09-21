@@ -1,0 +1,9 @@
+.env
+.env.*
+!.env.example
+node_modules/
+*.log
+test-results/
+test-tools/
+sources/
+cross-references.zip
