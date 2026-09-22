@@ -1,5 +1,11 @@
 # Bible text
 
+## Additional reading translations and commentary (2026-09-22)
+
+`public/data/en/`, `fr/`, and `de/` contain World English Bible, Louis Segond 1910, and Elberfelder 1905 respectively. Each source metadata file identifies the text as public domain. Downloaded from https://github.com/midvash/bible-data/tree/main/versions . Changes: split the original JSON into individual books for loading on demand. Scripture itself is not machine-translated. Verse numbering can differ across editions; cross references therefore explicitly display the Arabic reference text.
+
+`public/data/commentary/` contains Matthew Henry's Concise Commentary from https://www.ccel.org/ccel/henry/mhcc.xml . The source DC.Rights is Public Domain. Only the historical work is included, not the modern CCEL staff description. Changes: extracted book introductions, chapter outlines and commentary paragraphs as plain text; retained original verse ranges. The source places 2 Kings 1 and 2 Chronicles 1 directly under the book, so the importer restores their chapter wrappers. Chapters with only a general commentary are explicitly labeled as such. This Protestant commentary is provided in its original English; no Arabic, French or German translation of it is claimed. Rebuild using `node scripts/prepare-study-library.mjs`.
+
 Arabic Smith–Van Dyck (1865), public domain, downloaded from:
 https://github.com/midvash/bible-data/tree/main/versions/ar/svd
 
