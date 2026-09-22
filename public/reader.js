@@ -2,26 +2,26 @@ import {names,counts} from './planner.js';
 import {contextFor,chapterWords} from './study.js';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const n=x=>Number(x).toLocaleString('ar-EG');
-let biblePromise,crossPromise,current,origin,active='text',verseNumber=1;
+let biblePromise,crossPromise,current,origin,active='text',verseNumber=1,allowComplete=false,renderVersion=0;
 const bible=()=>biblePromise??=fetch('bible.json').then(r=>{if(!r.ok)throw Error('تعذر تحميل نص الكتاب');return r.json()}).catch(e=>{biblePromise=null;throw e});
 const cross=()=>crossPromise??=fetch('crossrefs.json').then(r=>{if(!r.ok)throw Error('تعذر تحميل الآيات المقابلة');return r.json()}).catch(e=>{crossPromise=null;throw e});
 const label=([b,c,v])=>`${names[b-1]} ${n(c)} : ${n(v)}`;
-export async function openReader(id,{keepOrigin=false,focusVerse=0}={}){
+export async function openReader(id,{keepOrigin=false,focusVerse=0,canMarkComplete=false}={}){
  const [b,c]=id.split(':').map(Number);if(!(b>=1&&b<=66&&c>=1&&c<=counts[b-1]))throw Error('الإصحاح غير موجود');
- current={b,c,id};if(!keepOrigin)origin=id;active='text';verseNumber=focusVerse||1;
+ current={b,c,id};if(!keepOrigin){origin=id;allowComplete=canMarkComplete}active='text';verseNumber=focusVerse||1;
  const modal=document.querySelector('#modal');modal.innerHTML='<p class="loading">جارٍ تحميل الإصحاح…</p>';if(!modal.open)modal.showModal();
  try{await renderReader();if(focusVerse)document.querySelector(`[data-verse="${focusVerse}"]`)?.scrollIntoView({block:'center',behavior:'instant'})}catch(e){modal.innerHTML=`<p class="error">${esc(e.message)}. جرّب تفتح الإصحاح تاني.</p><button class="button" data-action="close-modal">إغلاق</button>`}
 }
 async function renderReader(){
- const captured=current;const text=await bible();if(captured!==current)return;
+ const captured=current,version=++renderVersion;const text=await bible();if(captured!==current||version!==renderVersion)return;
  const {b,c,id}=current,verses=text.books.find(x=>x.bookId===b).chapters.find(x=>x.chapter===c).verses;
  const ctx=contextFor(b,c),terms=chapterWords(verses,b);
  let content='';
- if(active==='text')content=`<div class="scripture">${verses.map(v=>`<p data-verse="${v.number}" class="${v.number===verseNumber?'verse-focus':''}"><button class="verse-number" data-study-verse="${v.number}" title="الآيات المقابلة للآية ${v.number}">${n(v.number)}</button>${esc(v.text)}</p>`).join('')}</div><div class="reader-bottom"><button class="button" data-finish-read="${id}">قرأت الإصحاح</button><span class="muted small">اضغط رقم الآية لعرض الآيات المقابلة.</span></div>`;
+ if(active==='text')content=`<div class="scripture">${verses.map(v=>`<p data-verse="${v.number}" class="${v.number===verseNumber?'verse-focus':''}"><button class="verse-number" data-study-verse="${v.number}" title="الآيات المقابلة للآية ${v.number}">${n(v.number)}</button>${esc(v.text)}</p>`).join('')}</div><div class="reader-bottom">${allowComplete?`<button class="button" data-finish-read="${id}">قرأت الإصحاح</button>`:'<span class="note">لتسجيل تقدّمك، أنشئ خطة من صفحة رحلتي.</span>'}<span class="muted small">اضغط رقم الآية لعرض الآيات المقابلة.</span></div>`;
  if(active==='context')content=`<div class="study-content"><span class="tag">خلفية السفر</span><h3 style="margin:15px 0">${names[b-1]}</h3><p>${esc(ctx.background)}</p><h3 style="margin-top:24px">الإصحاح في سياقه</h3><p>${esc(ctx.summary)}</p><div class="note" style="margin:16px 0">القسم ده بيشمل ${ctx.from===ctx.to?'الإصحاح '+n(ctx.from):'الإصحاحات '+n(ctx.from)+'–'+n(ctx.to)}. ده مدخل للقسم، مش تفسير تفصيلي لكل آية.</div><div class="row">${ctx.from!==c?`<button class="text-link" data-reader-id="${b}:${ctx.from}">اقرأ بداية القسم</button>`:''}${c>1?`<button class="text-link" data-reader-id="${b}:${c-1}">الإصحاح السابق</button>`:''}${c<counts[b-1]?`<button class="text-link" data-reader-id="${b}:${c+1}">الإصحاح التالي</button>`:''}</div><h3 style="margin-top:24px">وأنت بتقرأ</h3><p>مين بيتكلم ولمين؟ إيه اللي سبق المقطع؟ وهل الكلام سرد لحدث، ولا شعر، ولا وصية، ولا رؤية؟ اقرأ الآية مع اللي قبلها وبعدها.</p><p class="muted small" style="margin-top:24px">مداخل تحريرية موجزة مستندة إلى محتوى السفر. مصدر القراءة: ترجمة فان دايك. لا تُنسب إلى مفسّر أو طائفة بعينها.</p></div>`;
  if(active==='words')content=`<div class="study-content"><p class="muted small" style="margin-bottom:18px">شرح مبسّط لألفاظ من قاموس الموقع ظهرت في الإصحاح. المعنى النهائي بيتحدد من السياق.</p>${terms.length?terms.map(([term,meaning])=>`<article class="word-entry"><h3>${esc(term)}</h3><p>${esc(meaning)}</p></article>`).join(''):'<div class="empty">مفيش ألفاظ من القاموس الحالي مطابقة للإصحاح ده. القاموس مبدئي، مش شرح شامل لكل الكلمات.</div>'}</div>`;
  if(active==='cross'){
-  const refs=await cross();if(captured!==current)return;
+  const refs=await cross();if(captured!==current||version!==renderVersion)return;
   const links=(refs[id]||[]).filter(r=>r.verse===verseNumber);
   content=`<div class="study-content"><div class="field"><label for="source-verse">الآيات المقابلة لأي آية؟</label><select id="source-verse">${verses.map(v=>`<option value="${v.number}" ${v.number===verseNumber?'selected':''}>آية ${n(v.number)}</option>`).join('')}</select></div><blockquote class="source-verse">${esc(verses.find(v=>v.number===verseNumber)?.text||'')}</blockquote>${links.length?links.map(r=>{const [tb,tc,tv]=r.target;const target=text.books.find(x=>x.bookId===tb)?.chapters.find(x=>x.chapter===tc)?.verses.find(x=>x.number===tv);return `<article class="cross-entry"><button class="text-link" data-reader-id="${tb}:${tc}" data-focus-verse="${tv}">${label(r.target)}${r.end.join(':')!==r.target.join(':')?' — '+label(r.end):''}</button><p class="scripture">${esc(target?.text||'')}</p><small class="muted">${r.end.join(':')!==r.target.join(':')?'معروض أول آية؛ افتح الإصحاح لقراءة المقطع.':'افتح الإصحاح لقراءة السياق.'}</small></article>`}).join(''):'<div class="empty">مفيش إحالات متاحة للآية دي في البيانات الحالية.</div>'}<p class="muted small" style="line-height:2;margin-top:22px">المصدر: <a href="https://openbible.info/labs/cross-references/" target="_blank" rel="noopener noreferrer">OpenBible.info</a>، بترخيص CC BY. بنعرض حتى ٥ إحالات لكل آية بعد التحقق من وجودها في النص العربي. التشابه قد يكون في الموضوع أو اللفظ أو الحدث، ولا يعني تطابق السياق أو المعنى.</p></div>`;
  }

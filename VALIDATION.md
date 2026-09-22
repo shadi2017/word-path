@@ -9,3 +9,10 @@
 Not yet verified: real two-user signup/login/email-confirmation workflow; actual cross-device persistence via the deployed site; actual outgoing emails; final GitHub Pages deployment. These need the user-controlled account signup, repository link and sender service configuration. Password entry remains with the user. The local database integration tests do not substitute for these final live checks.
 
 After production migrations are applied, preserve the original schema file and use a new migration for changes.
+
+## Update — 2026-09-22
+
+- Corrected GitHub Pages source from branch/Jekyll to GitHub Actions. The old root page served the README rather than the application.
+- Published commit `f2224f6` successfully, verified GitHub Actions run `35704232531` and the live application at https://shadi2017.github.io/word-path/ . The new «اقرأ وافهم» library is visible and lists all books and chapter buttons with contextual introductions and section maps.
+- Updated Supabase Site URL from localhost to the HTTPS GitHub Pages URL. The account list was empty at time of inspection; no owner/admin account was fabricated and no password was entered.
+- Re-ran all 27 data/planner tests successfully. Outgoing email remains unconfigured and is labeled as inactive in the settings UI.
