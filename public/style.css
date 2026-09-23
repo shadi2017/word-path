@@ -11,3 +11,7 @@
 .scripture[lang="en"],.scripture[lang="fr"],.scripture[lang="de"]{font-family:Georgia,'Times New Roman',serif;text-align:left;line-height:1.9}
 .reader-languages{margin:16px 0}.reader-languages label{display:block;font-size:13px}.reader-languages select{display:block;width:100%;margin-top:8px}
 .commentary-text{font-family:Georgia,'Times New Roman',serif;font-size:18px;line-height:1.9;text-align:left}.commentary-text h3{margin-top:24px}.reader-tabs{overflow-x:auto;flex-wrap:nowrap}.reader-tabs button{flex-shrink:0}
+.language-control{display:flex;align-items:center;gap:6px;max-width:180px}.language-control select{padding:7px 10px;font-size:.85rem;background:#fff;border:1px solid var(--border);border-radius:9px;width:100%}.auth-form>.language-control{margin-bottom:20px;margin-inline-start:auto}.topbar{gap:12px}.topbar>.language-control{flex-shrink:0}
+html[dir="ltr"]{font-family:system-ui,-apple-system,'Segoe UI',sans-serif}html[dir="ltr"] .brand strong{font-family:Georgia,serif}html[dir="ltr"] .member-main p{text-align:start!important}.verse[dir="ltr"] blockquote{font-family:Georgia,serif}.verse[dir="ltr"] cite{direction:ltr}
+@media(max-width:540px){.topbar>.language-control{max-width:125px}.language-control select{font-size:.78rem}.topbar{padding:0 12px}.topbar .mobile-brand{display:none}}
+.historical-note{padding:20px;border:1px solid var(--border);border-radius:12px;background:#f2f7f5;margin:16px 0 24px}.historical-note h4{margin-bottom:10px}.historical-note[dir="ltr"]{font-family:system-ui,sans-serif;text-align:left}

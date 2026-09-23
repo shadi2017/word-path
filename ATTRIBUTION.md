@@ -19,4 +19,6 @@ OpenBible.info, https://openbible.info/labs/cross-references/ , data archive htt
 
 ## Reading aids
 
+`public/historical-context.js` adds original historical/literary introductions in Arabic, English, French and German. The notes describe broad biblical settings and literary genres and cite passages in the bundled Bible. They are not translations of Matthew Henry or a claim of individual verse commentary, nor a comprehensive historical-critical account. Books sharing a literary/historical grouping intentionally share a clearly introductory context note.
+
 `public/study.js` contains original Arabic editorial book introductions, section outlines, and a limited vocabulary glossary prepared for this project. These are reading aids, not a complete commentary, original-language lexicon, or a denominationally approved teaching resource. Section summaries are explicitly labeled as section context rather than individual chapter exegesis. The text of the Bible is the primary source for the introductions and outline; the aids are stored separately from Scripture and can be edited after pastoral review.

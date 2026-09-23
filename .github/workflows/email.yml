@@ -24,5 +24,7 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          EMAIL_PROVIDER: ${{ vars.EMAIL_PROVIDER }}
           EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
           SITE_URL: ${{ vars.SITE_URL }}
