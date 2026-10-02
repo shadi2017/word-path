@@ -18,7 +18,7 @@ export const api={
  async signup(email,password,username,display_name){await request('/auth/v1/signup',{method:'POST',body:{email,password,data:{username,display_name}},auth:false})},
  async logout(){try{if(session)await request('/auth/v1/logout',{method:'POST'})}finally{save(null)}},
  rpc:(name,args={})=>request('/rest/v1/rpc/'+name,{method:'POST',body:args}),
- async recover(email){await request('/auth/v1/recover',{method:'POST',body:{email},auth:false})},
+ async recover(email){const redirectTo=location.origin+location.pathname;await request('/auth/v1/recover?redirect_to='+encodeURIComponent(redirectTo),{method:'POST',body:{email},auth:false})},
  async password(password){await request('/auth/v1/user',{method:'PUT',body:{password}})},
  callback(){const params=new URLSearchParams(location.hash.slice(1));if(params.has('access_token')){save({access_token:params.get('access_token'),refresh_token:params.get('refresh_token'),expires_at:Date.now()/1000+Number(params.get('expires_in')||3600)});history.replaceState(null,'',location.pathname);return params.get('type')==='recovery'}return false}
 };
