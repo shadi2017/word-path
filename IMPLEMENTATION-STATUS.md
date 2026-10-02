@@ -1,6 +1,10 @@
 # Requested multilingual study expansion
 
-Updated 2026-09-23. This expansion is not complete.
+Updated 2026-10-03. This expansion is not complete.
+
+Reading-plan PDF export added: direct browser download from the plan page, A4 cover with member name and progress snapshot, monthly reading tables, page numbers, and four interface languages. PDF pages contain rendered images to preserve Arabic shaping; PDF text is not selectable/searchable. 40 automated tests pass; the generated 25-page annual Arabic PDF was opened and representative pages rendered and visually reviewed.
+
+Email setup: BREVO_API_KEY was added by the owner to GitHub Actions Secrets, and SUPABASE_URL and EMAIL_FROM were also saved. SUPABASE_SERVICE_ROLE_KEY and remaining workflow variables still need setup; Brevo authorized-IP blocking is enabled. No delivery has been enabled or verified.
 
 Implemented and tested:
 - Full Arabic, English WEB, French LSG 1910 and German Elberfelder 1905 Bible text, with a persistent browser reading-language selection.

@@ -1,5 +1,7 @@
 // UI-only translations. Scripture, study sources and members' writing are excluded.
 export const messages=`
+تنزيل الخطة PDF|Download plan PDF|Télécharger le plan PDF|Leseplan als PDF herunterladen
+جارٍ تجهيز PDF…|Preparing PDF…|Préparation du PDF…|PDF wird erstellt…
 كلمة|Kalima|Kalima|Kalima
 رحلة كل يوم|A journey every day|Un chemin chaque jour|Jeden Tag ein Schritt
 رحلتي|My journey|Mon parcours|Mein Weg
