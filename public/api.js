@@ -9,7 +9,7 @@ async function request(path,{method='GET',body,auth=true}={}){
   refreshing??=request('/auth/v1/token?grant_type=refresh_token',{method:'POST',body:{refresh_token:session.refresh_token},auth:false}).then(s=>save({...s,expires_at:Date.now()/1000+s.expires_in})).finally(()=>refreshing=null);
   await refreshing;
  }
- const r=await fetch(cfg.supabaseUrl.replace(/\/$/,'')+path,{method,headers:{apikey:cfg.supabaseKey,...(auth&&session?.access_token?{Authorization:`Bearer ${session.access_token}`} : {}),'Content-Type':'application/json'},...(body!==undefined?{body:JSON.stringify(body)}:{})});
+ let r;try{r=await fetch(cfg.supabaseUrl.replace(/\/$/,'')+path,{method,signal:AbortSignal.timeout(20000),headers:{apikey:cfg.supabaseKey,...(auth&&session?.access_token?{Authorization:`Bearer ${session.access_token}`} : {}),'Content-Type':'application/json'},...(body!==undefined?{body:JSON.stringify(body)}:{})});}catch{throw Error('تعذر الاتصال بالخدمة. تحقق من الإنترنت وحاول مرة أخرى بعد قليل.');}
  const data=await r.json().catch(()=>null);if(!r.ok){if(r.status===401&&auth)save(null);throw Error(data?.msg||data?.message||data?.error_description||'تعذر الاتصال. جرّب مرة تانية.')}return data;
 }
 export const api={

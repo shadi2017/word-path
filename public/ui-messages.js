@@ -1,5 +1,11 @@
 // UI-only translations. Scripture, study sources and members' writing are excluded.
 export const messages=`
+استعادة كلمة المرور|Reset password|Réinitialiser le mot de passe|Passwort zurücksetzen
+اكتب إيميل حسابك لإرسال رابط تغيير كلمة المرور.|Enter your account email to request a password reset link.|Saisissez votre adresse e-mail pour demander un lien de réinitialisation.|Geben Sie Ihre Konto-E-Mail ein, um einen Link zum Zurücksetzen anzufordern.
+إرسال رابط الاستعادة|Send reset link|Envoyer le lien|Link senden
+جارٍ إرسال رابط الاستعادة…|Sending reset link…|Envoi du lien…|Link wird gesendet…
+لو الإيميل مسجّل، هيوصلك رابط لتغيير كلمة المرور. راجع البريد الوارد والرسائل غير المرغوب فيها.|If the email is registered, you will receive a password reset link. Check your inbox and spam folder.|Si cette adresse est enregistrée, vous recevrez un lien. Vérifiez votre boîte de réception et les indésirables.|Falls die Adresse registriert ist, erhalten Sie einen Link. Prüfen Sie Posteingang und Spamordner.
+تعذر الاتصال بالخدمة. تحقق من الإنترنت وحاول مرة أخرى بعد قليل.|Cannot connect to the service. Check your connection and try again shortly.|Connexion au service impossible. Vérifiez votre connexion et réessayez bientôt.|Der Dienst ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es später erneut.
 تنزيل الخطة PDF|Download plan PDF|Télécharger le plan PDF|Leseplan als PDF herunterladen
 جارٍ تجهيز PDF…|Preparing PDF…|Préparation du PDF…|PDF wird erstellt…
 كلمة|Kalima|Kalima|Kalima
