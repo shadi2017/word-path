@@ -7,6 +7,7 @@ create schema auth;create table auth.users(id uuid primary key,email text,email_
 create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$;grant usage on schema auth to authenticated;grant execute on function auth.uid() to authenticated;`);
 await db.exec(fs.readFileSync(new URL('../supabase/schema.sql',import.meta.url),'utf8'));
 await db.exec(fs.readFileSync(new URL('../supabase/migrations/20260923_languages.sql',import.meta.url),'utf8'));
+await db.exec(fs.readFileSync(new URL('../supabase/migrations/20261004_companions.sql',import.meta.url),'utf8'));
 const ids=['00000000-0000-0000-0000-000000000001','00000000-0000-0000-0000-000000000002','00000000-0000-0000-0000-000000000003'];
 for(let i=0;i<3;i++)await db.query('insert into auth.users values($1,$2,now(),$3)',[ids[i],`test${i}@example.com`,JSON.stringify({username:'tester'+i,display_name:'Test '+i})]);
 await db.query("update private.profiles set role='admin',status='approved' where id=$1",[ids[0]]);
@@ -30,4 +31,24 @@ await check('username search and profile do not expose email',async()=>{const r=
 await check('encouragement and length validation',async()=>{await as(ids[2],'select public.send_encouragement($1,$2)',[ids[1],'كمّل، كل خطوة بتفرق']);const r=await as(ids[1],'select public.dashboard() as d');assert.equal(r.rows[0].d.comments[0].body,'كمّل، كل خطوة بتفرق');await assert.rejects(()=>as(ids[2],'select public.send_encouragement($1,$2)',[ids[1],' ']))});
 await check('preferences and service-only delivery log',async()=>{await as(ids[1],'select public.save_preferences(true,true)');await db.exec('reset role; set role service_role');let r=await db.query("select public.email_recipients('2026-01-02') as m");assert.equal(r.rows[0].m.length,1);await db.query("select public.record_email($1,'2026-01-02','test-id')",[ids[1]]);r=await db.query("select public.email_recipients('2026-01-02') as m");assert.equal(r.rows[0].m.length,0)});
 await check('revocation immediately blocks member actions',async()=>{await as(ids[0],"select public.manage_member($1,'reject')",[ids[1]]);await assert.rejects(()=>as(ids[1],"select public.set_progress(array['1:2'],true)"));await assert.rejects(()=>as(ids[1],"select public.search_members('test')"));const r=await as(ids[1],'select public.dashboard() as d');assert.equal(r.rows[0].d.me.status,'rejected')});
+await check('pending or revoked users cannot follow or read following lists',async()=>{await assert.rejects(()=>as(ids[1],"select public.set_follow('tester2',true)"));await assert.rejects(()=>as(ids[1],'select public.followed_members()'));await assert.rejects(()=>as(ids[2],"select public.set_follow('tester1',true)"));await as(ids[0],"select public.manage_member($1,'approve')",[ids[1]])});
+await check('following is persistent, idempotent, owner-scoped and removable',async()=>{
+ await as(ids[2],"select public.set_follow('@TESTER1',true)");await as(ids[2],"select public.set_follow('tester1',true)");
+ let r=await as(ids[2],'select public.followed_members() as m');assert.equal(r.rows[0].m.length,1);assert.equal(r.rows[0].m[0].username,'tester1');assert.equal(r.rows[0].m[0].total,1);assert.equal(r.rows[0].m[0].today_read,1);assert.equal(r.rows[0].m[0].email,undefined);
+ assert.equal((await as(ids[0],'select public.followed_members() as m')).rows[0].m.length,0);
+ await assert.rejects(()=>as(ids[2],"select public.set_follow('tester2',true)"));await assert.rejects(()=>as(ids[2],'select * from private.follows'));
+ await as(ids[0],"select public.set_follow('tester1',false)");assert.equal((await as(ids[2],'select public.followed_members() as m')).rows[0].m.length,1);
+ await as(ids[2],"select public.set_follow('tester1',false)");assert.equal((await as(ids[2],'select public.followed_members() as m')).rows[0].m.length,0);
+});
+await check('group administrator receives member plans and today totals; outsiders remain denied',async()=>{
+ const r=await as(ids[0],'select public.organization_members($1) as m',[org]);assert.equal(r.rows[0].m[0].plan.mode,'ordered');assert.equal(r.rows[0].m[0].today_read,1);
+ const ordinary=await as(ids[1],'select public.organization_members($1) as m',[org]);assert.equal(ordinary.rows[0].m[0].plan,null);
+ await assert.rejects(()=>as(ids[2],'select public.organization_members($1)',[org]));
+});
+await check('today count excludes previous Cairo calendar days and revoked friends',async()=>{
+ await as(ids[2],"select public.set_follow('tester1',true)");await db.exec('reset role');
+ await db.query("update private.progress set completed_at=((now() at time zone 'Africa/Cairo')::date::timestamp at time zone 'Africa/Cairo')-interval '1 second' where user_id=$1",[ids[1]]);
+ let r=await as(ids[2],'select public.followed_members() as m');assert.equal(r.rows[0].m[0].today_read,0);assert.equal(r.rows[0].m[0].total,1);
+ await as(ids[0],"select public.manage_member($1,'reject')",[ids[1]]);r=await as(ids[2],'select public.followed_members() as m');assert.deepEqual(r.rows[0].m,[]);
+});
 await db.close();console.log(`${checks} database integration checks passed.`);
