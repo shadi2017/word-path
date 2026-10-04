@@ -45,6 +45,7 @@ def export(db, public):
     manifest = {'schema': 1, 'source': 'User-supplied St-Takla knowledge base', 'canonBooks': 66, 'authors': {}, 'excludedPages': 0, 'unverifiedSections': 0, 'alignment':alignment}
     bundles = defaultdict(list)
     coverage = defaultdict(set)
+    exported = defaultdict(set)
     for i,p in entities.items():
         if p['type'] != 'commentary_page': continue
         slug = p.get('book')
@@ -80,13 +81,16 @@ def export(db, public):
         stats['sections'] += len(sections)
         stats['reviewPages'] += bool(page['issues'] or page['missingFootnotes'])
     for (author,book,chapter), pages in sorted(bundles.items(),key=lambda x:str(x[0])):
+        if chapter != 'intro' and (book, int(chapter)) not in valid:
+            continue
         path = output/author/str(book)/f'{chapter}.json'
         path.parent.mkdir(parents=True,exist_ok=True)
         path.write_text(json.dumps({'pages':pages},ensure_ascii=False,separators=(',',':')),encoding='utf-8')
+        exported[author].add(f'{book}/{chapter}')
         manifest['authors'][author]['introductions' if chapter=='intro' else 'chapters'] += 1
     for author,stats in manifest['authors'].items():
         stats['mappedVerses'] = len(coverage[author])
-        stats['available'] = [f'{b}/{c}' for a,b,c in bundles if a==author]
+        stats['available'] = sorted(exported[author])
     manifest['totalBibleVerses'] = sum(map(len,valid.values()))
     (output/'manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8')
     print(json.dumps({a:{k:v for k,v in s.items() if k!='available'} for a,s in manifest['authors'].items()},ensure_ascii=True))
