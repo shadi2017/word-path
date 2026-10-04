@@ -224,4 +224,8 @@ Email not confirmed|Confirm your email before signing in|Confirmez votre adresse
 الإجراء ده متاح للأدمن فقط.|This action is for administrators only.|Action réservée aux administrateurs.|Diese Aktion ist nur für Administratoren verfügbar.
 اكتب حرفين على الأقل.|Enter at least two characters.|Saisissez au moins deux caractères.|Geben Sie mindestens zwei Zeichen ein.
 تعذر الاتصال. جرّب مرة تانية.|Connection failed. Please try again.|Échec de connexion. Réessayez.|Verbindung fehlgeschlagen. Bitte erneut versuchen.
+ضيف رفيقك باليوزر، تابع تقدّمه النهارده، وشجّعه.|Add a friend by username, follow today's progress, and encourage them.|Ajoutez un ami par son identifiant, suivez ses progrès et encouragez-le.|Fügen Sie Freunde per Benutzername hinzu, verfolgen Sie den heutigen Fortschritt und ermutigen Sie sie.
+اتضاف لقائمة المتابعة على حسابك.|Saved to your following list.|Ajouté à votre liste de suivi.|In Ihrer Folgeliste gespeichert.
+تم إلغاء المتابعة.|Unfollowed.|Suivi arrêté.|Nicht mehr gefolgt.
+اختار اسم مستخدم لعضو آخر.|Choose another member's username.|Choisissez l’identifiant d’un autre membre.|Wählen Sie den Benutzernamen eines anderen Mitglieds.
 `.trim().split('\n').map(row=>row.split('|'));
