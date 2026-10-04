@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {renderStudyPages,studyHTML,saveSource} from '../public/study-library.js';
+import {renderStudyPages,studyHTML,saveSource,selectedSource,sourceSelector} from '../public/study-library.js';
 const read=path=>readFile(new URL('../public/'+path,import.meta.url),'utf8').then(JSON.parse);
 test('Arabic study export preserves canonical references, coverage totals and source provenance',async()=>{
  const manifest=await read('data/study/manifest.json'),bible=await read('bible.json');
@@ -39,6 +39,14 @@ test('verse commentary preserves noncontiguous mappings, escapes source text and
  const two=renderStudyPages([page],2,'verse','en');assert.match(two,/No passage is mapped/);assert.doesNotMatch(two,/&lt;img/);
  const context=renderStudyPages([page],1,'context','en');assert.match(context,/Unmapped history/);assert.doesNotMatch(context,/&lt;img/);
  assert.match(renderStudyPages([page],1,'overview','en'),/Unmapped history/);
+});
+test('Tadros is the default source without denomination tagline or source link',()=>{
+ assert.equal(selectedSource(),'tadros_yacoub_malaty');
+ assert.match(sourceSelector('ar'),/<option value="tadros_yacoub_malaty" selected>القمص تادرس يعقوب ملطي<\/option>/);
+ const page={url:'https://st-takla.org/example',issues:[],missingFootnotes:[],footnotes:[],sections:[{title:'مقدمة',text:'محتوى محلي',verses:[],footnotes:[]}]};
+ const rendered=renderStudyPages([page],1,'overview','ar');
+ assert.match(rendered,/محتوى محلي/);
+ assert.doesNotMatch(rendered,/افتح المصدر على موقع الأنبا تكلا|تفسير قبطي أرثوذكسي|href=/);
 });
 test('failed study loads can be retried and unavailable chapters do not fetch guessed URLs',async()=>{
  const previous=globalThis.fetch;let attempts=0;
