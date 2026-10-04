@@ -1,7 +1,9 @@
 import {loadCommentary,labels} from './translations.js';
+import {selectedSource,studyHTML} from './study-library.js';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const paragraphs=items=>items.map(p=>`<p>${esc(p)}</p>`).join('');
 export async function commentaryHTML(book,chapter,verse,overview,lang='ar'){
+ if(selectedSource()!=='henry')return studyHTML(book,chapter,verse,overview?'overview':'verse',lang);
  const data=await loadCommentary(book),item=data.chapters[chapter-1],t=labels[lang];
  const arabicResource=lang==='ar'?'<aside class="note" lang="ar" dir="rtl" translate="no"><strong>تفسير عربي للدراسة</strong><p>مكتبة بوب أتلي تضم تفاسير ومقدمات تاريخية لعدد من الأسفار، ومسحًا للعهدين. تفتح على موقع المصدر؛ لا تشمل كل الأسفار، وليست ترجمة لتفسير متى هنري المعروض هنا.</p><a href="https://www.freebiblecommentary.org/arabic_bible_study.htm" target="_blank" rel="noopener noreferrer">افتح مكتبة التفسير العربي — بوب أتلي ↗</a></aside>':'';
  const note=`${arabicResource}<div class="note">${t[7]}</div><p class="muted small">${t[8]}</p>`;

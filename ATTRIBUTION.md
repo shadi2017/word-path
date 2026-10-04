@@ -1,5 +1,11 @@
 # Bible text
 
+## User-supplied St-Takla commentary (2026-10-04)
+
+`public/data/study/` is a plain-text export of the owner's supplied St-Takla knowledge base. Authors: Fr. Tadros Yacoub Malaty, Fr. Antonious Fekry, and the Church Encyclopedia. These are Coptic Orthodox commentaries, not translations of Matthew Henry or newly authored evangelical commentary. Each page preserves its direct https://st-takla.org/ source URL, extractor version, source content hash, section identities, footnote definitions and review flags. Source links and author attribution appear in the reader.
+
+The owner supplied this corpus for use on the church's site and stated that permission had been obtained. No public-domain or open-license status is asserted for these commentaries; rights remain with their respective authors/publisher. Transformations: restrict to the selected 66-book canon, split by author/book/chapter, retain plain-text sections and footnotes, and move unverified verse mappings to context. See `STUDY-DATA.md` for actual coverage and limitations. No source database, raw HTML cache or unrelated crawler data is published.
+
 ## Additional reading translations and commentary (2026-09-22)
 
 `public/data/en/`, `fr/`, and `de/` contain World English Bible, Louis Segond 1910, and Elberfelder 1905 respectively. Each source metadata file identifies the text as public domain. Downloaded from https://github.com/midvash/bible-data/tree/main/versions . Changes: split the original JSON into individual books for loading on demand. Scripture itself is not machine-translated. Verse numbering can differ across editions; cross references therefore explicitly display the Arabic reference text.
