@@ -1,0 +1,24 @@
+name: Test owner verse email
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: kalima-owner-email-test
+  cancel-in-progress: false
+jobs:
+  test-email:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node scripts/email-test.mjs
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          SITE_URL: https://shadi2017.github.io/word-path/
