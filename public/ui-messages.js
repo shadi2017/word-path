@@ -268,4 +268,58 @@ Email not confirmed|Confirm your email before signing in|Confirmez votre adresse
 أنشئ مجموعة من لوحة الإدارة، وضيف الأعضاء المقبولين.|Create a group from the administration panel and add approved members.|Créez un groupe depuis le panneau d'administration et ajoutez les membres approuvés.|Erstellen Sie eine Gruppe im Verwaltungsbereich und fügen Sie freigegebene Mitglieder hinzu.
 الأدمن يقدر يضيفك لمجموعة القراءة المناسبة.|An administrator can add you to a suitable reading group.|Un administrateur peut vous ajouter à un groupe de lecture approprié.|Ein Administrator kann Sie einer passenden Lesegruppe hinzufügen.
 لا مشكلة محددة|No specific issue|Aucun problème particulier|Kein besonderes Problem
+رحلتي|My journey|Mon parcours|Mein Weg
+خطة القراءة|Reading plan|Plan de lecture|Leseplan
+اقرأ وافهم|Read and understand|Lire et comprendre|Lesen und verstehen
+رفقاء الرحلة|Companions|Compagnons|Gefährten
+المجموعات|Groups|Groupes|Gruppen
+الإعدادات|Settings|Paramètres|Einstellungen
+الإدارة|Administration|Administration|Verwaltung
+كلمة · رحلة كل يوم|Kalima · A journey every day|Kalima · Un chemin chaque jour|Kalima · Jeden Tag unterwegs
+كلمة · خطوة كل يوم|Kalima · A step every day|Kalima · Un pas chaque jour|Kalima · Ein Schritt jeden Tag
+مش لازم تقطع الرحلة لو فاتك يوم.|You do not have to break the journey if you miss a day.|Il n'est pas nécessaire d'interrompre le parcours si vous manquez un jour.|Sie müssen die Reise nicht abbrechen, wenn Sie einen Tag verpassen.
+ارجع، وخد خطوة صغيرة النهارده.|Return and take a small step today.|Revenez et faites un petit pas aujourd'hui.|Kehren Sie zurück und machen Sie heute einen kleinen Schritt.
+كل يوم، أقرب للكلمة|Every day, closer to the Word|Chaque jour, plus près de la Parole|Jeden Tag näher am Wort
+خطوة صغيرة. نمو كل يوم.|A small step. Growth every day.|Un petit pas. Une croissance chaque jour.|Ein kleiner Schritt. Wachstum jeden Tag.
+خلّي للكلمة وقت في يومك.|Give the Word time in your day.|Donnez du temps à la Parole dans votre journée.|Geben Sie dem Wort Zeit in Ihrem Tag.
+رحلتك تبدأ بخطة تناسب وقتك.|Your journey begins with a plan that fits your time.|Votre parcours commence par un plan adapté à votre temps.|Ihre Reise beginnt mit einem Plan, der zu Ihrer Zeit passt.
+صمّم رحلتك|Design your journey|Concevez votre parcours|Gestalten Sie Ihre Reise
+بداية جديدة|A new beginning|Un nouveau départ|Ein neuer Anfang
+خطوة ورا خطوة|Step by step|Pas à pas|Schritt für Schritt
+كل وقت بتقضيه في الكلمة بيصنع فرق. كمّل على مهلك.|Every moment spent in the Word makes a difference. Continue at your pace.|Chaque moment passé dans la Parole fait la différence. Continuez à votre rythme.|Jede in dem Wort verbrachte Minute macht einen Unterschied. Fahren Sie in Ihrem Tempo fort.
+كلمة تشجيع|A word of encouragement|Un mot d'encouragement|Ein Wort der Ermutigung
+إرسال التشجيع|Send encouragement|Envoyer un encouragement|Ermutigung senden
+كل يوم، أقرب للكلمة|Every day, closer to the Word|Chaque jour, plus près de la Parole|Jeden Tag näher am Wort
+آية ليومك|A verse for your day|Un verset pour votre jour|Ein Vers für Ihren Tag
+قراءة النهارده|Today's reading|Lecture d'aujourd'hui|Heutige Lesung
+مع بعض، نكمل|Together, we finish|Ensemble, nous achevons|Gemeinsam vollenden wir
+ضيف رفيقك باليوزر، تابع تقدّمه النهارده، وشجّعه.|Add a companion by username, follow today's progress, and encourage them.|Ajoutez un compagnon par identifiant, suivez ses progrès et encouragez-le.|Fügen Sie einen Begleiter per Benutzername hinzu, verfolgen Sie den heutigen Fortschritt und ermutigen Sie ihn.
+على راحتك|At your ease|À votre aise|Nach Ihrem Wohlgefallen
+لغة الكتاب المقدس|Bible language|Langue de la Bible|Sprache der Bibel
+رسائل البريد الإلكتروني|Email messages|Messages électroniques|E-Mail-Nachrichten
+نسخة من رحلتك|A copy of your journey|Une copie de votre parcours|Eine Kopie Ihrer Reise
+إدارة الرحلة|Manage the journey|Gérer le parcours|Die Reise verwalten
+قبول الأعضاء، وتنظيم مجموعات القراءة.|Approve members and organize reading groups.|Approuver les membres et organiser les groupes de lecture.|Mitglieder freigeben und Lesegruppen organisieren.
+مفيش طلبات في الانتظار.|No pending requests.|Aucune demande en attente.|Keine ausstehenden Anfragen.
+أنشئ مجموعة من لوحة الإدارة، وضيف الأعضاء المقبولين.|Create a group from the administration panel and add approved members.|Créez un groupe depuis le panneau d'administration et ajoutez les membres approuvés.|Erstellen Sie eine Gruppe im Verwaltungsbereich und fügen Sie freigegebene Mitglieder hinzu.
+الأدمن يقدر يضيفك لمجموعة القراءة المناسبة.|An administrator can add you to a suitable reading group.|Un administrateur peut vous ajouter à un groupe de lecture approprié.|Ein Administrator kann Sie einer passenden Lesegruppe hinzufügen.
+لا مشكلة محددة|No specific issue|Aucun problème particulier|Kein besonderes Problem
+تسجيل الدخول|Sign in|Connexion|Anmelden
+طلب الانضمام|Request to join|Demander à rejoindre|Beitritt beantragen
+أهلًا بيك في الرحلة|Welcome to the journey|Bienvenue dans le parcours|Willkommen auf der Reise
+منوّر من جديد|Welcome back|Bon retour|Willkommen zurück
+اسمك|Your name|Votre nom|Ihr Name
+اسم المستخدم|Username|Nom d'utilisateur|Benutzername
+البريد الإلكتروني|Email|E-mail|E-Mail
+كلمة المرور|Password|Mot de passe|Passwort
+حفظ التفضيلات|Save preferences|Enregistrer les préférences|Einstellungen speichern
+حفظ خطتي|Save my plan|Enregistrer mon plan|Meinen Plan speichern
+تعديل الخطة|Edit plan|Modifier le plan|Plan bearbeiten
+تنزيل الخطة PDF|Download plan PDF|Télécharger le plan PDF|Plan als PDF herunterladen
+تحديث حالة الطلب|Refresh request status|Actualiser le statut de la demande|Anfragestatus aktualisieren
+ربط الحسابات مطلوب أولًا.|Connecting accounts is required first.|La connexion des comptes est requise d'abord.|Kontoverknüpfung ist zuerst erforderlich.
+صديق الرحلة|Friend of the journey|Ami du parcours|Freund der Reise
+صديق الكلمة|Friend of the Word|Ami de la Parole|Freund des Wortes
+مجموعة قراءة وتشجيع|Reading and encouragement group|Groupe de lecture et d'encouragement|Lese- und Ermutigungsgruppe
+يوم متبقّي في الخطة قراءة النهارده|Days remaining in the plan, today's reading|Jours restants dans le plan, lecture d'aujourd'hui|Verbleibende Tage im Plan, heutige Lesung
 `.trim().split('\n').map(row=>row.split('|'));
