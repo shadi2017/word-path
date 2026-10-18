@@ -228,4 +228,44 @@ Email not confirmed|Confirm your email before signing in|Confirmez votre adresse
 اتضاف لقائمة المتابعة على حسابك.|Saved to your following list.|Ajouté à votre liste de suivi.|In Ihrer Folgeliste gespeichert.
 تم إلغاء المتابعة.|Unfollowed.|Suivi arrêté.|Nicht mehr gefolgt.
 اختار اسم مستخدم لعضو آخر.|Choose another member's username.|Choisissez l’identifiant d’un autre membre.|Wählen Sie den Benutzernamen eines anderen Mitglieds.
+رحلتي|My journey|Mon parcours|Mein Weg
+خطة القراءة|Reading plan|Plan de lecture|Leseplan
+اقرأ وافهم|Read and understand|Lire et comprendre|Lesen und verstehen
+رفقاء الرحلة|Companions|Compagnons|Gefährten
+المجموعات|Groups|Groupes|Gruppen
+الإعدادات|Settings|Paramètres|Einstellungen
+الإدارة|Administration|Administration|Verwaltung
+كلمة|Kalima|Kalima|Kalima
+رحلة كل يوم|A journey every day|Un chemin chaque jour|Jeden Tag unterwegs
+كلمة · رحلة كل يوم|Kalima · A journey every day|Kalima · Un chemin chaque jour|Kalima · Jeden Tag unterwegs
+كلمة · خطوة كل يوم|Kalima · A step every day|Kalima · Un pas chaque jour|Kalima · Ein Schritt jeden Tag
+مش لازم تقطع الرحلة لو فاتك يوم.|You do not have to break the journey if you miss a day.|Il n'est pas nécessaire d'interrompre le parcours si vous manquez un jour.|Sie müssen die Reise nicht abbrechen, wenn Sie einen Tag verpassen.
+ارجع، وخد خطوة صغيرة النهارده.|Return and take a small step today.|Revenez et faites un petit pas aujourd'hui.|Kehren Sie zurück und machen Sie heute einen kleinen Schritt.
+رحلتك في الكتاب المقدس|Your journey in Scripture|Votre parcours dans l'Écriture|Ihre Reise in der Schrift
+خطة القراءة بالشهور|Reading plan by months|Plan de lecture par mois|Leseplan nach Monaten
+مساحة كل يوم للكلمة|Space for the Word every day|Un espace pour la Parole chaque jour|Raum für das Wort jeden Tag
+أبدأ خطة|Start a plan|Commencer un plan|Plan beginnen
+تعديل خطتي|Edit my plan|Modifier mon plan|Meinen Plan bearbeiten
+صمّم رحلتك|Design your journey|Concevez votre parcours|Gestalten Sie Ihre Reise
+الكتاب المقدس|The Holy Bible|La Sainte Bible|Die Heilige Bibel
+٦٦ سفر · ترجمة فان دايك|66 books · Van Dyck translation|66 livres · traduction Van Dyck|66 Bücher · Van-Dyck-Übersetzung
+إصحاحات|chapters|Chapitres|Kapitel
+الخلفيات التوضيحية|Background notes|Notes de fond|Hintergrundnotizen
+مدخل إلى|Introduction to|Introduction à|Einführung zu
+خريطة السفر|Book outline|Plan du livre|Buchgliederung
+مداخل تحريرية وسياق لأقسام السفر، وليست تفسيرًا تفصيليًا لكل آية.|Editorial introductions and context for sections of the book, not a detailed commentary on every verse.|Introductions éditoriales et contexte des sections du livre, pas un commentaire détaillé de chaque verset.|Redaktionelle Einführungen und Kontext zu Abschnitten des Buches, keine detaillierte Auslegung jedes Verses.
+آية ليومك|A verse for your day|Un verset pour votre jour|Ein Vers für Ihren Tag
+قراءة النهارده|Today's reading|Lecture d'aujourd'hui|Heutige Lesung
+مع بعض، نكمل|Together, we finish|Ensemble, nous achevons|Gemeinsam vollenden wir
+ضيف رفيقك باليوزر، تابع تقدّمه النهارده، وشجّعه.|Add a companion by username, follow today's progress, and encourage them.|Ajoutez un compagnon par identifiant, suivez ses progrès et encouragez-le.|Fügen Sie einen Begleiter per Benutzername hinzu, verfolgen Sie den heutigen Fortschritt und ermutigen Sie ihn.
+على راحتك|At your ease|À votre aise|Nach Ihrem Wohlgefallen
+لغة الكتاب المقدس|Bible language|Langue de la Bible|Sprache der Bibel
+رسائل البريد الإلكتروني|Email messages|Messages électroniques|E-Mail-Nachrichten
+نسخة من رحلتك|A copy of your journey|Une copie de votre parcours|Eine Kopie Ihrer Reise
+إدارة الرحلة|Manage the journey|Gérer le parcours|Die Reise verwalten
+قبول الأعضاء، وتنظيم مجموعات القراءة.|Approve members and organize reading groups.|Approuver les membres et organiser les groupes de lecture.|Mitglieder freigeben und Lesegruppen organisieren.
+مفيش طلبات في الانتظار.|No pending requests.|Aucune demande en attente.|Keine ausstehenden Anfragen.
+أنشئ مجموعة من لوحة الإدارة، وضيف الأعضاء المقبولين.|Create a group from the administration panel and add approved members.|Créez un groupe depuis le panneau d'administration et ajoutez les membres approuvés.|Erstellen Sie eine Gruppe im Verwaltungsbereich und fügen Sie freigegebene Mitglieder hinzu.
+الأدمن يقدر يضيفك لمجموعة القراءة المناسبة.|An administrator can add you to a suitable reading group.|Un administrateur peut vous ajouter à un groupe de lecture approprié.|Ein Administrator kann Sie einer passenden Lesegruppe hinzufügen.
+لا مشكلة محددة|No specific issue|Aucun problème particulier|Kein besonderes Problem
 `.trim().split('\n').map(row=>row.split('|'));
