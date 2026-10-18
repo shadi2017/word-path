@@ -5,6 +5,7 @@ import {commentaryHTML} from './commentary.js';
 import {getLocale} from './i18n.js';
 import {historicalHTML} from './historical-context.js';
 import {sourceSelector,saveSource,studyHTML} from './study-library.js';
+let textLanguage=savedLanguage('kalima-bible-language');
 export function setReaderLanguage(lang){textLanguage=lang;saveLanguage('kalima-bible-language',lang);const sel=document.querySelector('#reader-language');if(sel)sel.value=lang;if(document.querySelector('#modal')?.open){renderReader().catch(()=>{})}}
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const n=x=>Number(x).toLocaleString(getLocale());
