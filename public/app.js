@@ -1,11 +1,12 @@
 import {names,counts,chapters,categories,buildPlan,stats,today,addDays,endForMonths} from './planner.js';
 import {api,configured} from './api.js';
-import {openReader} from './reader.js';
+import {openReader,setReaderLanguage} from './reader.js';
 import {downloadPlanPDF} from './plan-pdf.js';
 import {companionCard,companionLabels} from './companions.js';
 import {backgrounds} from './study.js';
 import {getLocale,setLocale,translateText,watchLocale,languageControl} from './i18n.js';
 import {languages,savedLanguage,saveLanguage,editions} from './translations.js';
+window.setReaderLanguage=setReaderLanguage;
 const $=s=>document.querySelector(s),root=$('#app');
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const number=n=>Number(n).toLocaleString(getLocale());
@@ -53,12 +54,12 @@ document.addEventListener('click',async e=>{const b=e.target.closest('button');i
  if(b.dataset.approve||b.dataset.reject||b.dataset.promote){const target=b.dataset.approve||b.dataset.reject||b.dataset.promote;if(b.dataset.promote&&!confirm(translateText('تعيين العضو أدمن بيسمح له بقبول الأعضاء وإدارة المجموعات. متأكد؟')))return;await api.rpc('manage_member',{p_user:target,p_action:b.dataset.approve?'approve':b.dataset.reject?'reject':'promote'});adminData=await api.rpc('admin_overview');render();toast('تم تحديث العضو');return}
  switch(b.dataset.action){case 'demo':followed=[];community=[];companionsError='';demo=true;state=demoState();view='home';render();break;case 'logout':if(!demo)await api.logout();demo=false;state=null;adminData=null;community=[];followed=[];companionsError='';companionsLoading=false;auth();break;case 'new-plan':openPlan();break;case 'close-modal':$('#modal').close();break;case 'complete-today':{const d=getPlan().find(d=>d.date===today());if(d)await complete(d.chapters.map(c=>c.id),true);break}case 'refresh':await load();render();break;case 'export':{const blob=new Blob([JSON.stringify({exported_at:new Date().toISOString(),plan:state.plan,completed_chapters:state.done},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='kalima-progress-'+today()+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);break}case 'recover':{if(!configured)throw Error('ربط الحسابات مطلوب أولًا.');const email=$('#email').value;if(!email||!$('#email').checkValidity())throw Error('اكتب إيميلك الصحيح الأول.');await api.recover(email);toast('لو الإيميل مسجّل، هيوصلك رابط لتغيير كلمة المرور.');break}}
  }catch(err){toast(err.message)}});
-document.addEventListener('change',async e=>{if(e.target.id==='interface-language'){e.target.disabled=true;try{await persistLanguages(e.target.value,savedLanguage('kalima-bible-language'));render()}catch{}finally{e.target.disabled=false}return}if(e.target.id==='library-book'){libraryBook=Number(e.target.value);render()}if(e.target.id==='month'){month=e.target.value;render()}if(['start','end','mode'].includes(e.target.id))previewPlan();if(e.target.dataset.chapter){const t=e.target;t.disabled=true;try{await complete([t.dataset.chapter],t.checked)}catch(err){t.checked=!t.checked;t.disabled=false;toast(err.message)}}});
+document.addEventListener('change',async e=>{if(e.target.id==='interface-language'){const lang=e.target.value;e.target.disabled=true;try{await setAppLanguage(lang)}catch{}finally{e.target.disabled=false}return}if(e.target.id==='library-book'){libraryBook=Number(e.target.value);render()}if(e.target.id==='month'){month=e.target.value;render()}if(['start','end','mode'].includes(e.target.id))previewPlan();if(e.target.dataset.chapter){const t=e.target;t.disabled=true;try{await complete([t.dataset.chapter],t.checked)}catch(err){t.checked=!t.checked;t.disabled=false;toast(err.message)}}});
 document.addEventListener('submit',async e=>{e.preventDefault();const form=e.target,data=new FormData(form),button=form.querySelector('button:not([type="button"])');if(button)button.disabled=true;const val=n=>String(data.get(n)||'');try{
  if(form.id==='recovery-form'){const status=form.querySelector('[role="alert"]');status.className='note';status.textContent=translateText('جارٍ إرسال رابط الاستعادة…');await api.recover(val('email').trim());status.textContent=translateText('لو الإيميل مسجّل، هيوصلك رابط لتغيير كلمة المرور. راجع البريد الوارد والرسائل غير المرغوب فيها.');}
  if(form.id==='auth-form'){if(authTab==='signup'){await api.signup(val('email'),val('password'),val('username').toLowerCase(),val('display_name'));toast('راجع إيميلك للتأكيد. بعده الأدمن يراجع طلبك.');authTab='login';auth()}else{await api.login(val('email'),val('password'));await load();render()}}
  if(form.id==='plan-form'){buildPlan(val('start'),val('end'),val('mode'));if(!demo)await api.rpc('save_plan',{p_start:val('start'),p_end:val('end'),p_mode:val('mode')});state.plan={start_date:val('start'),end_date:val('end'),mode:val('mode')};month=val('start').slice(0,7);$('#modal').close();view='plan';render();toast(demo?'الخطة اتعملت للتجربة فقط.':'اتحفظت خطتك. بداية مباركة!')}
- if(form.id==='settings-form'){const s={daily_email:data.has('daily_email'),reminder_email:data.has('reminder_email')};if(!demo)await api.rpc('save_preferences',{p_daily:s.daily_email,p_reminder:s.reminder_email});state.settings={...state.settings,...s};await persistLanguages(getLocale(),val('bible_language'));await loadDailyVerse();toast(demo?'تفضيلات تجريبية؛ مش هيتم إرسال إيميل.':'تم حفظ تفضيلات البريد')}
+ if(form.id==='settings-form'){const s={daily_email:data.has('daily_email'),reminder_email:data.has('reminder_email')};if(!demo)await api.rpc('save_preferences',{p_daily:s.daily_email,p_reminder:s.reminder_email});state.settings={...state.settings,...s};await persistLanguages(val('bible_language'),val('bible_language'));await loadDailyVerse();toast(demo?'تفضيلات تجريبية؛ مش هيتم إرسال إيميل.':'تم حفظ تفضيلات البريد')}
  if(form.id==='follow-form'){await followMember(val('username').trim(),true);}
  if(form.id==='search-form'){if(demo){toast('البحث الحقيقي يحتاج تفعيل الحسابات.');return}community=await api.rpc('search_members',{p_query:val('username').replace(/^@/,'')});$('#search-results').innerHTML=community.length?community.map(m=>memberHTML(m)).join(''):'<p class="empty">مفيش أعضاء مقبولين بالاسم ده.</p>'}
  if(form.id==='comment-form'){await api.rpc('send_encouragement',{p_recipient:profile.member.id,p_body:val('body')});$('#modal').close();toast('كلمة تشجيعك وصلت ✓')}
@@ -74,6 +75,12 @@ async function persistLanguages(ui,bible){
  try{if(!demo&&state?.me.status==='approved')await api.rpc('save_languages',{p_ui:ui,p_bible:bible});setLocale(ui);saveLanguage('kalima-bible-language',bible);if(state)state.settings={...state.settings,ui_language:ui,bible_language:bible};}
  catch(error){setLocale(previous);saveLanguage('kalima-bible-language',previousBible);toast(error.message);throw error;}
 }
-document.addEventListener('bible-language-change',e=>{e.detail.task=persistLanguages(getLocale(),e.detail.language).then(async()=>{await loadDailyVerse();if(view==='home')render()})});
+async function setAppLanguage(lang){
+  await persistLanguages(lang,lang);
+  await loadDailyVerse();
+  if(window.setReaderLanguage)try{window.setReaderLanguage(lang)}catch{}
+  render();
+}
+window.setAppLanguage=setAppLanguage;
 watchLocale();init();
 if(document.modelContext?.registerTool){document.modelContext.registerTool({name:'get_reading_progress',description:'Read the signed-in user’s current Bible plan and progress; does not change data.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true},execute:()=>{if(!state||state.me.status!=='approved')throw Error('Sign in with an approved account first');return {demo,plan:state.plan,completedChapters:state.done.length,total:1189}}})}
