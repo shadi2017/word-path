@@ -23,15 +23,22 @@ export function renderStudyPages(pages,verse,mode,lang='ar'){
  }).join('')||`<p translate="no">${t[8]}</p>`;
 }
 export async function studyHTML(book,chapter,verse,mode,lang='ar'){
- const author=selectedSource(),t=copy[lang]||copy.ar;
- if(author==='henry')return '';
- try{
-  const data=await load(author,book,chapter);
-  let content=renderStudyPages(data.pages,verse,mode,lang);
-  if(mode==='context'){
-   const intro=await load(author,book,'intro');
-   content=`<details class="study-intro"><summary>${t[3]}</summary>${renderStudyPages(intro.pages,verse,'intro',lang)}</details><h3>${t[4]}</h3>${content}`;
-  }
-    return `<div translate="no"><p class="note"><strong>${esc(sources[author])}</strong></p><p class="muted small">${referenceNote[lang]||referenceNote.ar}</p>${content}</div>`;
- }catch{return `<p class="error" translate="no">${t[9]}</p>`}
+  const author=selectedSource(),t=copy[lang]||copy.ar;
+  if(author==='henry')return '';
+  try{
+   let usedAuthor=author;
+   let data=await load(author,book,chapter);
+   let fallbackNote='';
+   if((!data.pages||!data.pages.length) && author!=='tadros_yacoub_malaty'){
+    const fb=await load('tadros_yacoub_malaty',book,chapter);
+    if(fb.pages&&fb.pages.length){data=fb;usedAuthor='tadros_yacoub_malaty';fallbackNote=`<p class="note small" translate="no">المصدر المختار لا يغطي هذا الإصحاح؛ عُرض تفسير ${esc(sources[usedAuthor])}.</p>`;}
+   }
+   let content=renderStudyPages(data.pages,verse,mode,lang);
+   if(mode==='context'){
+    let introData={pages:[]};
+    try{introData=await load(usedAuthor,book,'intro');}catch{}
+    content=`<details class="study-intro"><summary>${t[3]}</summary>${renderStudyPages(introData.pages,verse,'intro',lang)}</details><h3>${t[4]}</h3>${content}`;
+   }
+   return `<div translate="no"><p class="note"><strong>${esc(sources[usedAuthor])}</strong></p>${fallbackNote}<p class="muted small">${referenceNote[lang]||referenceNote.ar}</p>${content}</div>`;
+  }catch{return `<p class="error" translate="no">${t[9]}</p>`}
 }
