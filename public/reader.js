@@ -1,6 +1,6 @@
 import {names,counts} from './planner.js';
 import {contextFor,chapterWords} from './study.js';
-import {languages,editions,savedLanguage,saveLanguage,loadBook,labels} from './translations.js';
+import {languages,editions,savedLanguage,saveLanguage,loadBook,arabicBible,labels} from './translations.js';
 import {commentaryHTML} from './commentary.js';
 import {getLocale} from './i18n.js';
 import {historicalHTML} from './historical-context.js';
@@ -8,8 +8,9 @@ import {sourceSelector,saveSource,studyHTML} from './study-library.js';
 let textLanguage=savedLanguage('kalima-bible-language');
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const n=x=>Number(x).toLocaleString(getLocale());
-let biblePromise,crossPromise,current,origin,active='text',verseNumber=1,allowComplete=false,renderVersion=0;
-const bible=()=>biblePromise??=fetch('bible.json').then(r=>{if(!r.ok)throw Error('تعذر تحميل نص الكتاب');return r.json()}).catch(e=>{biblePromise=null;throw e});
+let crossPromise,current,origin,active='text',verseNumber=1,allowComplete=false,renderVersion=0;
+// The Arabic corpus is fetched once through translations.js and shared here.
+const bible=arabicBible;
 const cross=()=>crossPromise??=fetch('crossrefs.json').then(r=>{if(!r.ok)throw Error('تعذر تحميل الآيات المقابلة');return r.json()}).catch(e=>{crossPromise=null;throw e});
 const label=([b,c,v])=>`${names[b-1]} ${n(c)} : ${n(v)}`;
 export async function openReader(id,{keepOrigin=false,focusVerse=0,canMarkComplete=false}={}){

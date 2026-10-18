@@ -1,5 +1,5 @@
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-export const sources={tadros_yacoub_malaty:'القمص تادرس يعقوب ملطي',antonious_fekry:'القمص أنطونيوس فكري',church_encyclopedia:'الموسوعة الكنسية',henry:'Matthew Henry · English'};
+export const sources={tadros_yacoub_malaty:'القمص تادرس يعقوب ملطي',antonious_fekry:'القمص أنطونيوس فكري',church_encyclopedia:'الموسوعة الكنسية',applied_commentary:'التفسير التطبيقي (OCR)',henry:'Matthew Henry · English'};
 const copy={
  ar:['مصدر التفسير','','لا يوجد مقطع مرتبط بهذه الآية في المصدر المختار. راجع تفسير الإصحاح والخلفية والسياق.','مقدمة السفر والخلفية','سياق الإصحاح','الحواشي','','بعض الروابط أو الحواشي تحتاج مراجعة؛ المقاطع غير المحددة معروضة كسياق فقط.','هذا المحتوى غير متاح في المصدر المختار.','تعذر تحميل التفسير. أعد اختيار التبويب للمحاولة مجددًا.'],
  en:['Commentary source','','No passage is mapped to this verse in this source. See the chapter commentary and context.','Book introduction and background','Chapter context','Footnotes','','Some mappings or footnotes need review; unmapped passages are context only.','This content is unavailable in the selected source.','Could not load commentary. Select the tab again to retry.'],

@@ -9,6 +9,7 @@ Imported from the owner's local `D:\UniversalCrawler\data\knowledge.db` on 2026-
 | Tadros Yacoub Malaty | 1,183 | 66 | 30,655 |
 | Antonious Fekry | 1,188 | 66 | 29,559 |
 | Church Encyclopedia | 1,044 | 51 | 28,218 |
+| Applied Bible Commentary (OCR) | 266 | 0 | 0 |
 
 These are three Coptic Orthodox sources, explicitly labeled in the reader. Matthew Henry's English Protestant commentary remains a separate selectable source. No Arabic evangelical translation, French translation or German translation of the imported commentary is claimed. New interface controls and notices have Arabic, English, French and German labels; source text remains Arabic.
 
@@ -34,3 +35,8 @@ node --test tests/*.test.mjs
 The committed manifest lists availability, exact coverage, review counts and verse-text differences. Data is split into approximately 3,600 lazy-loaded JSON files under `public/data/study`, about 141 MB total; the largest chapter is below 0.5 MB. Only the selected author's chapter and, on the context tab, its introduction are downloaded. No database migrations or API secrets are needed.
 
 Review `ATTRIBUTION.md` for provenance. Browser errors are retryable by selecting the tab again. A missing chapter in one source does not silently substitute a different author.
+
+
+## Applied Bible Commentary (OCR, 2026-10-18)
+
+`applied_commentary` is a partial OCR import of "التفسير التطبيقي للكتاب المقدس" (archive.org item 188-pdf_202105): 266 chapters across 38 books, no verse-level mappings, no book introductions. Chapter segmentation relies on running headers and is approximate; pages carry an `issues` note marking them as OCR-derived. Books with no detectable running headers (e.g. Romans, Lamentations, James) are simply absent from this source. See ATTRIBUTION.md.

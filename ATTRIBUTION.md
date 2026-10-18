@@ -6,6 +6,12 @@
 
 The owner supplied this corpus for use on the church's site and stated that permission had been obtained. No public-domain or open-license status is asserted for these commentaries; rights remain with their respective authors/publisher. Transformations: restrict to the selected 66-book canon, split by author/book/chapter, retain plain-text sections and footnotes, and move unverified verse mappings to context. See `STUDY-DATA.md` for actual coverage and limitations. No source database, raw HTML cache or unrelated crawler data is published.
 
+## Applied Bible Commentary (OCR, 2026-10-18)
+
+`public/data/study/applied_commentary/` is a partial plain-text import of "التفسير التطبيقي للكتاب المقدس" digitised on archive.org (item `188-pdf_202105`). The only usable layer is the djvu.txt OCR (≈98% Arabic text, clean prose), so chapter-level segmentation is derived from running book/chapter headers and the verse-text/table blocks are filtered out. Coverage is therefore partial (≈266 of 1189 chapters, mostly the Old Testament) and every page is marked with `issues` noting the OCR origin. No verse-level mapping is claimed (`verses: []`); the reader shows each chapter's commentary as context.
+
+The owner supplied this source and stated that permission had been obtained, on the same standing as the St-Takla corpus. No public-domain or open-license status is asserted. Transformations: restrict to the app's 66-book canon, segment by running headers with monotonic book/chapter constraints, drop mangled verse-text and table lines, require a minimum length, and label every page as OCR-derived. Rebuild with `python scripts/import-applied-commentary.py`. See `STUDY-DATA.md` for limitations.
+
 ## Additional reading translations and commentary (2026-09-22)
 
 `public/data/en/`, `fr/`, and `de/` contain World English Bible, Louis Segond 1910, and Elberfelder 1905 respectively. Each source metadata file identifies the text as public domain. Downloaded from https://github.com/midvash/bible-data/tree/main/versions . Changes: split the original JSON into individual books for loading on demand. Scripture itself is not machine-translated. Verse numbering can differ across editions; cross references therefore explicitly display the Arabic reference text.

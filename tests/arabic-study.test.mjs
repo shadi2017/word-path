@@ -1,12 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {renderStudyPages,studyHTML,saveSource,selectedSource,sourceSelector} from '../public/study-library.js';
+import {renderStudyPages,studyHTML,saveSource,selectedSource,sourceSelector,sources} from '../public/study-library.js';
 const read=path=>readFile(new URL('../public/'+path,import.meta.url),'utf8').then(JSON.parse);
 test('Arabic study export preserves canonical references, coverage totals and source provenance',async()=>{
  const manifest=await read('data/study/manifest.json'),bible=await read('bible.json');
  assert.equal(manifest.canonBooks,66);
+ const provenance={tadros_yacoub_malaty:['https://st-takla.org/','st-takla-3'],antonious_fekry:['https://st-takla.org/','st-takla-3'],church_encyclopedia:['https://st-takla.org/','st-takla-3'],applied_commentary:['https://archive.org/','applied-commentary-ocr-v1']};
  for(const [author,stats] of Object.entries(manifest.authors)){
+  const [prefix,extractor]=provenance[author];
   const covered=new Set();let sections=0,chapters=0,intros=0,pages=0;
   for(const key of stats.available){
    const [b,c]=key.split('/'),data=await read(`data/study/${author}/${key}.json`);
@@ -16,8 +18,8 @@ test('Arabic study export preserves canonical references, coverage totals and so
    if(c==='intro')intros++;else chapters++;
    pages+=data.pages.length;
    for(const page of data.pages){
-    assert.ok(page.url.startsWith('https://st-takla.org/'));
-    assert.equal(page.extractor,'st-takla-3');
+    assert.ok(page.url.startsWith(prefix),`${author}/${key}: ${page.url}`);
+    assert.equal(page.extractor,extractor);
     for(const s of page.sections){
      sections++;assert.equal(typeof s.text,'string');assert.ok(s.text.length);
      if(s.mappingReview)assert.deepEqual(s.verses,[]);
