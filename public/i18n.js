@@ -20,7 +20,7 @@ export function translateText(value,language=locale){
 }
 export function setLocale(value){if(!languages[value])return;locale=value;saveLanguage('kalima-ui-language',value);if(typeof document!=='undefined'){document.documentElement.lang=value;document.documentElement.dir=value==='ar'?'rtl':'ltr';applyLocale();}}
 const originals=new WeakMap(),attributes=new WeakMap();
-const excluded='[translate="no"],script,style,textarea,.scripture,.source-verse,.study-content,.commentary-text,.verse blockquote,.verse cite,.comment,.account-name,.avatar,.member-main h3,#org-select option[value]:not([value=""]),#member-select option[value]:not([value=""])';
+const excluded='[translate="no"],script,style,textarea,.scripture,.source-verse,.commentary-text,.verse blockquote,.verse cite,.comment,.account-name,.avatar,.member-main h3,#org-select option[value]:not([value=""]),#member-select option[value]:not([value=""])';
 export function applyLocale(){
  if(typeof document==='undefined')return;
  document.documentElement.lang=locale;document.documentElement.dir=locale==='ar'?'rtl':'ltr';
